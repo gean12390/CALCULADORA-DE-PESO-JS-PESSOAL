@@ -1,75 +1,145 @@
-import { calc_chapa } from "./calculo.js";
+let quantidade = document.getElementById('quantidade');
+let espaco = document.getElementById('espaco');
+let final = document.getElementById('resultado');
+let cod_material = document.getElementById('cod_material');
+let i = 0;
+valor = [];
+let separar = [];
+let resultado = [];
 
-const botao = document.getElementById('material');
 
-
-botao.addEventListener('change', function(){
-    
-   let botao_1 = botao.value;
-
-    if(botao_1 == document.getElementById('chapa').value){
-        chapa();
-    } else if(botao_1 == document.getElementById('redondo').value){
-        redondo();
-    } else if(botao_1 == document.getElementById('quadrado').value){
-        quadrado();
-    }else if(botao_1 == document.getElementById('nd').value){
-        limpar();
+document.addEventListener('keydown', (event) => {
+    if (document.activeElement.id === 'cod_material' && event.key === 'Tab') {
+        document.getElementById('ajuda').select();
+        document.getElementById('resultado').select();
+    } else if(document.activeElement.id === 'id_1' && event.shiftKey && event.key === 'Tab'){
+        document.getElementById('ajuda').focus();
     }
 });
 
-function chapa(){
-            document.getElementById('respostas').innerHTML = '<br><br><br><br><select id="opc_1"><option id="nm_0" value="0">0</option><option id="nm_1" value="1">1</option><option id="nm_2" value="2">2</option><option id="nm_3" value="3">3</option><option id="nm_4" value="4">4</option><option id="nm_5" value="5">5</option><option id="nm_6" value="6">6</option><option id="nm_7" value="7">7</option><option id="nm_8" value="8">8</option><option id="nm_9" value="9">9</option><option id="nm_10" value="10">10</option></select></label><label><input type="text" class="chapa" id="chapa_1" placeholder="CHAPA"></label><label><input type="number" class="chapa" id="chapa_1_1_2" value="0" placeholder="CHAPA"><label><input type="text" class="chapa" id="chapa_2" placeholder="CHAPA"></label><label><input type="text" class="chapa" id="chapa_3" placeholder="CHAPA"></label>';
-            document.getElementById('calcular').className = 'Chapa'
-}
 
-function redondo(){
+function input(){
 
-    document.getElementById('respostas').innerHTML = '<br><br><br><br><label><input type="text" class="Redondo_1" placeholder="REDONDO"></label><label><input type="text" class="Redondo_1" placeholder="REDONDO"></label>';
-    document.getElementById('calcular').className = 'Redondo'
-
-}
-
-function quadrado(){
-}
-
-function limpar(){
-    document.getElementById('respostas').innerHTML = ' ';
-    document.getElementById('respostas_2').innerHTML = ' ';
-
-}
-
-
-    let calcular = document.getElementById('calcular');
-
-    calcular.addEventListener('click', function(){
-        
-       let calcul = calcular.className;
-    
-        if(calcul == 'Chapa'){
-            calc_chapa();
-        } else if(calcul == 'Redondo'){
-            calc_redondo()
+    if(quantidade.value == ""){
+        i = 0;
+        espaco.innerHTML = ' ';
+    }else if(quantidade.value <= 7){
+        espaco.appendChild(document.createElement('hr'));
+        if(i < quantidade.value){
+            for(i; i < parseFloat(quantidade.value); i++){
+                espaco.appendChild(document.createElement('input')).id = `id_${i + 1}`; 
+                document.getElementById(`id_${i + 1}`).setAttribute('autocomplete', 'off');
+                document.getElementById(`id_${i + 1}`).placeholder = `ESPAÇO ${i + 1}`;
+            }
+        }else if (i > parseFloat(quantidade.value)) {
+    for ( i; i > parseFloat(quantidade.value); i--) {
+        const elemento = document.getElementById(`id_${i}`);
+        if (elemento) {
+            espaco.removeChild(elemento);
         }
-    });
+    }
+}
+    }else{
+        alert('Não é possivel criar 8 ou mais inputs');
+        document.getElementById('quantidade'). value = ' ';
+        espaco.innerHTML = ' ';
+        i = 0;
+    }
+}
 
-// LIMPAR
-let clean = document.querySelector('.limpar');
+function calcular(){
+        let total = 0;
 
-clean.addEventListener('click' , function(){
+    for(let p = 0; p < parseFloat(quantidade.value); p++){
+        valor[p] = document.getElementById(`id_${p + 1}`).value;
+        separar[p] = [];
+         let denominador
+        let numerador
+        let fracao
+        let inteiro
 
-    limpar();
+        if(valor[p].includes('/')){
+            for(let j = 0; j < valor[p].length; j++){
+                separar[p][j] = valor[p][j];
+            }
+            for(let j = 0; j < separar[p].length; j++){
+                if(separar[p][j] == '.'){
+                     inteiro = parseFloat(separar[p][j - 1]) * 25.4; 
+                } else if(separar[p][j] == '/'){
+                    if(separar[p][j + 2] != null){
+                         denominador = (separar[p][j + 1] + separar[p][j + 2]);
+                         numerador = separar[p][j - 1];
+                         fracao = (parseFloat(numerador/denominador)) * 25.4;
+                    }else{
+                          denominador = parseFloat(separar[p][j + 1]);
+                         numerador = parseFloat(separar[p][j - 1]);      
+                         fracao = (parseFloat(numerador/denominador)) * 25.4;
+                    }
+                }
+            }
+            if(valor[p].includes('.')){
+            resultado[p] = parseFloat(inteiro + fracao);
+            }else if(!valor[p].includes('.')){
+                resultado[p] = parseFloat(fracao);
+            }
+        } else if(valor[p].includes(`'`) || valor[p].includes(`p`) || valor[p].includes(`P`)){
+            inteiro = parseFloat(valor[p]) * 25.4;
+            resultado[p] = inteiro;
+        } else if(!valor[p].includes(`'`) && !valor[p].includes('/')){
+            if(valor[p].includes('MTS') || valor[p].includes('MT') || valor[p].includes('mts') || valor[p].includes('mt')){
+                inteiro =  parseFloat(valor[p]) * 1000;
+                resultado[p] = inteiro 
+        
+        } else if(!isNaN(parseFloat((valor[p])))){
+            resultado[p] = parseFloat(valor[p]);
+            }
+        }        
+            total += resultado[p];
+           
+            
+        }
+        if(total == 0){
+        }
+            //alert(isNaN(total) ? 0 : parseFloat(total).toFixed(2));
+        _codigo_material(parseFloat(total), parseFloat(cod_material.value), parseFloat(quantidade.value));
+}
 
+document.body.addEventListener('keydown', (event) =>{
+    if(event.key == "Enter"){
+
+       calcular();
+
+    }
 });
 
+function _codigo_material(x, y, j){
+    if(y == 1){
+        if(j == 2){
+          x = (((((resultado[0] * resultado[0])* resultado[1]) * 2.7) * 3.1416) / 4000000);
+            if(x < 0.1){
+                final.value = (0.1).toFixed(3);
+            }else{
+                final.value = x.toFixed(3);
+            }
+        }else if(j == 1 ){
+           x = ((x * 2.7) / 1000000);
+                        if(x < 0.1){
+                final.value = (0.1).toFixed(3);
+            }else{
+                final.value = x.toFixed(3);
+            }
+        }else if(j > 2){
+            
+        }
 
-export function limpar_2(){
 
-let res = 0
-document.getElementById('respostas_2').innerHTML = ' ';
-document.getElementById('chapa_1_1_1').value = 0;
-document.getElementById('chapa_1_1_2').value = 0;
-document.getElementById('chapa_1').value = 0;
-document.getElementById('chapa_2').value = 0;
-document.getElementById('chapa_3').value = 0;
+    }
 }
+
+
+quantidade.addEventListener('input', input);
+
+document.getElementById('ajuda').addEventListener('click', () => {
+    alert('Codigos: \n\n 1 - Aluminio \n 2 - Cobre \n 3 - Latão');
+
+})
