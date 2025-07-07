@@ -6,74 +6,41 @@
     <title>Calculadora de Peso</title>
     <style>
         body{
-            margin: 40px;
+            margin: 20px;
         }
-        #material, .Chapa, .Redondo, .quadr, .botao{
+        input{
             font-size: 20px;
+            padding: 3px;
+            margin: 5px;
         }
-        #respostas , #respostas_2{
-            width: 100%;
-            height: 500px;
-        }
-        .limpar{
-            font-size: 20px;
-        }
-        .chapa , .chapa_1, .Redondo_1{
-            font-size: 20px;
-            margin-right: 40px;
-        }
-        #chapa_1{
-            margin-left: 40px;
-        }
-        .limpar_2{
-            font-size: 20px;
-        }
-        #resposta_final, .limpar_2{
-            position: relative;
-            top: -35vh;
-            margin-left: 10vw;
-            font-size: 20px;
-        }
-        #opc_1, #chapa_1_1_2{
-            width: 3vw;
-            position: relative;
-        }
-        #chapa_1_1_2{
-            left: 1.95vw;
-        }
-        #opc_1{
-            font-size: 20px;
-            left: 2vw;
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        #ajuda{
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-<form>
+    <input type="number" id="quantidade" placeholder="QNTD. DE ESPAÇOS"> 
+    <br>
+    <input type="number" id="itens_qntd" placeholder="QNTD. DE ITENS"> 
+    <br>
+    <br>
+    <input type="number" placeholder="COD.MATERIAL" id="cod_material"> <input type="button" id="ajuda" value="AJUDA">
+    <input type="number" id="resultado" placeholder="RESULTADO P/Kg" readonly>
 
-<select id="material">
-    <option value="" id="nd">Escolha uma das opções:</option>
-    <option value="chapa" id="chapa">Chapa</option>
-    <option value="redondo" id="redondo">Redondo</option>
-    <option value="quadrado" id="quadrado">Quadrado</option>
-
-</select>
-
-    <input type="button" value="Calcular" class="botao" id="calcular">
-    <input type="reset" value="Limpar" class="limpar">
-
-<main>
-    <div id="respostas">
-
-    </div>
-
-    <div id="respostas_2"></div>
-</main>
-
-</form>
-    <script type="module" src="script.js"></script>
-    <script type="module" src="calculo.js"></script>
-
+    <br>
+    <br>
+    <br>
+    <div id="espaco"></div>
+    <script src="script.js"></script>
 </body>
 </html>
